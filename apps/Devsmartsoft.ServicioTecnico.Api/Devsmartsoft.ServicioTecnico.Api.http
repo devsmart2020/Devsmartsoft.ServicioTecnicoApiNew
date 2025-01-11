@@ -1,0 +1,6 @@
+@Devsmartsoft.ServicioTecnico.Api_HostAddress = http://localhost:5208
+
+GET {{Devsmartsoft.ServicioTecnico.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

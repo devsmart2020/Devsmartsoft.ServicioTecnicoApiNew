@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Devsmartsoft.ServicioTecnicoApi.Infrastructure.Persistence": {
+      "commandName": "Project"
+    }
+  }
+}
