@@ -10,4 +10,9 @@
     <Folder Include="Config\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NPOI" Version="2.7.2" />
+    <PackageReference Include="PdfPig" Version="0.1.9" />
+  </ItemGroup>
+
 </Project>

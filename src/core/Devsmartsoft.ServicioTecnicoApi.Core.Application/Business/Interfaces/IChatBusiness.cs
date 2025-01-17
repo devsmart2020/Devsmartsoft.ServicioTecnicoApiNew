@@ -1,7 +1,12 @@
-﻿namespace Devsmartsoft.ServicioTecnicoApi.Core.Application.Business.Interfaces
+﻿using Devsmartsoft.ServicioTecnicoApi.Core.Dtos.Request;
+using Devsmartsoft.ServicioTecnicoApi.Core.Dtos.Response;
+
+namespace Devsmartsoft.ServicioTecnicoApi.Core.Application.Business.Interfaces
 {
     public interface IChatBusiness
     {
-        IAsyncEnumerable<string> GetGptStream(string question);
+        Task<ApiResponse<string>> ProcessFileChat(ChatFileRequestDto chatFileRequest);
+        IAsyncEnumerable<string> GetResultChat(string question);           
+
     }
 }

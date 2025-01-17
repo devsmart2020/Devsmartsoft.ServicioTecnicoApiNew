@@ -9,8 +9,7 @@ namespace Devsmartsoft.ServicioTecnicoApi.Infrastructure.Persistence.OpenAI
     {
         private readonly string _model = ConfigConstants.ModelOpenAI;
         private readonly string _apiKey = ConfigConstants.ApiKeyOpenAI;
-        private readonly ChatClient _client;
-        private List<ChatMessage> _messages = new();
+        private readonly ChatClient _client;      
 
         public ClientGpt()
         {
@@ -19,12 +18,11 @@ namespace Devsmartsoft.ServicioTecnicoApi.Infrastructure.Persistence.OpenAI
 
         public async IAsyncEnumerable<string> SendQuestionStream(string question)
         {
-            _messages.Add(new UserChatMessage(question));
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             System.ClientModel.CollectionResult<StreamingChatCompletionUpdate> stream;
             try
             {
-                stream = _client.CompleteChatStreaming(_messages);
+                stream = _client.CompleteChatStreaming(question);
             }
             catch (Exception)
             {
@@ -33,7 +31,6 @@ namespace Devsmartsoft.ServicioTecnicoApi.Infrastructure.Persistence.OpenAI
 
             foreach (StreamingChatCompletionUpdate update in stream)
             {
-                // Cada 'update' puede traer múltiples trozos (chunks)
                 foreach (ChatMessageContentPart? content in update.ContentUpdate)
                 {
                     string chunk = content.Text;
@@ -44,11 +41,8 @@ namespace Devsmartsoft.ServicioTecnicoApi.Infrastructure.Persistence.OpenAI
 
             if (sb.Length > 0)
             {
-                _messages.Add(new AssistantChatMessage(sb.ToString()));
+                sb.AppendLine(sb.ToString());
             }
-
-            // 7. (Opcional) Aquí podrías "yield return" un token indicando fin, 
-            //    o simplemente terminar el método.
         }
     }
 }

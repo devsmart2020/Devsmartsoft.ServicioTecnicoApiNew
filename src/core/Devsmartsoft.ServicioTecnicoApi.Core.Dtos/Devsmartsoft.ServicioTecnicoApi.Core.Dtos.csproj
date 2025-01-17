@@ -10,8 +10,4 @@
     <ProjectReference Include="..\..\shared\Devsmartsoft.ServicioTecnicoApi.Shared\Devsmartsoft.ServicioTecnicoApi.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Request\" />
-  </ItemGroup>
-
 </Project>

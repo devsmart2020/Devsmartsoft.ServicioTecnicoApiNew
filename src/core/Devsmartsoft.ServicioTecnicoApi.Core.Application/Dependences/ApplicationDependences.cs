@@ -26,7 +26,7 @@ namespace Devsmartsoft.ServicioTecnicoApi.Core.Application.Dependences
             services.AddTransient<ITipoGastoBusiness, TipoGastoBusiness>();
             services.AddTransient<IUbicacionBusiness, UbicacionBusiness>();
             services.AddTransient<IVentaBusiness, VentaBusiness>();
-            services.AddTransient<IVentaDetalleBusiness, VentaDetalleBusiness>();         
+            services.AddTransient<IVentaDetalleBusiness, VentaDetalleBusiness>();
             services.AddTransient<IChatBusiness, ChatBusiness>();
 
         }

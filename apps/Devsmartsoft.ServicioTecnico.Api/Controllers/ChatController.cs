@@ -1,5 +1,8 @@
 ﻿using Devsmartsoft.ServicioTecnico.Api.Controllers.Base;
 using Devsmartsoft.ServicioTecnicoApi.Core.Application.Business.Interfaces;
+using Devsmartsoft.ServicioTecnicoApi.Core.Dtos.Request;
+using Devsmartsoft.ServicioTecnicoApi.Core.Dtos.Response;
+using Devsmartsoft.ServicioTecnicoApi.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -14,30 +17,42 @@ namespace Devsmartsoft.ServicioTecnico.Api.Controllers
             _chatBusiness = chatBusiness;
         }
 
-        [HttpPost("SendQuestion")]
-        public async Task<ActionResult<string>> SendQuestion(string question)
+        [HttpPost("ProcessFileChat")]      
+        public async Task<ApiResponse<string>> ProcessFileChat(IFormFile file)
         {
-            if (string.IsNullOrWhiteSpace(question))
-                return BadRequest("La pregunta no puede estar vacía.");
+            if (file == null)
+            {
+                return new ApiResponse<string>
+                {
+                    NotificationType = NotificationsEnum.Error,
+                    Messages = new List<string> { "File is required." }
+                };
+            }
 
-            // Concatenamos todos los "chunks" recibidos de GetGptStream
-            var sb = new StringBuilder();
+            ChatFileRequestDto chatFileRequest = new()
+            {
+                FileStream = file.OpenReadStream(),
+                FileName = file.FileName
+            };           
+            return await _chatBusiness.ProcessFileChat(chatFileRequest);
+        }
 
+        [HttpPost("GetResultChat")]
+        public async Task<IActionResult> SendQuestion(string question)
+        {
+            StringBuilder sb = new();
             try
             {
-                await foreach (var chunk in _chatBusiness.GetGptStream(question))
+                await foreach (var chunk in _chatBusiness.GetResultChat(question))
                 {
                     sb.Append(chunk);
                 }
             }
             catch (Exception ex)
             {
-                // Opcional: Manejo de excepciones: log, etc.
                 return StatusCode(StatusCodes.Status500InternalServerError,
                                   $"Ocurrió un error: {ex.Message}");
             }
-
-            // Devolvemos la respuesta completa
             return Ok(sb.ToString());
         }
     }
